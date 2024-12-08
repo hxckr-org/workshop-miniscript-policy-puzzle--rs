@@ -1,16 +1,18 @@
-use std::{collections::HashMap, str::FromStr};
+use std::collections::HashMap;
 
 use miniscript::{
-    bitcoin::{key::Secp256k1, Amount, PublicKey},
+    bitcoin::{key::Secp256k1, Amount},
     descriptor::Wsh,
-    policy::Concrete,
     Descriptor,
 };
 use workshop_miniscript_policy_puzzle__rs::{
-    generate_new_checked_address, generate_signature, mine_bitcoins, setup_bitcoind, spending_tx,
-    wallet_keypairs,
+    generate_new_checked_address, mine_bitcoins, setup_bitcoind, spending_tx, wallet_keypairs,
 };
 
+/// This test checks to see that a one of two keys can equally spend when encumbered by the
+/// spending condition requiring any one of the keys. The tasks here require:
+/// 1. The creation of an appropriate policy and compilation to miniscript.
+/// 2. The provision of witness requirements to satisfy the spending condition.
 #[test]
 fn one_of_two_equally_likely_first() {
     // 1. Setup bitcoind
@@ -20,7 +22,7 @@ fn one_of_two_equally_likely_first() {
     let (private_key_1, public_key_1) = wallet_keypair[0];
     let (_private_key_2, public_key_2) = wallet_keypair[1];
 
-    // 2. Task 1: Create miniscript policy for the single-key spending condition.
+    // 2. Task 1: Create miniscript policy for the spending condition.
     let policy_str = todo!("write the policy that matches the spending condition.");
     let policy = todo!("create a concrete policy from policy_str");
 
@@ -70,7 +72,7 @@ fn one_of_two_equally_likely_second() {
     let (_private_key_1, public_key_1) = wallet_keypair[0];
     let (private_key_2, public_key_2) = wallet_keypair[1];
 
-    // 2. Task 1: Create miniscript policy for the single-key spending condition.
+    // 2. Task 1: Create miniscript policy for the spending condition.
     let policy_str = todo!("write the policy that matches the spending condition.");
     let policy = todo!("create a concrete policy from policy_str");
 
