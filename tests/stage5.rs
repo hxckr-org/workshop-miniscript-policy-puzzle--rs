@@ -96,7 +96,7 @@ fn user_and_service() {
     let (user_private_key, user_public_key) = wallet_keypair[0];
     let (service_private_key, service_public_key) = wallet_keypair[1];
 
-    // 2. Task 1: Create miniscript policy for the single-key spending condition.
+    // 2. Task 1: Create miniscript policy for the spending condition.
     let policy_str = todo!("write the policy that matches the spending condition.");
     let policy = todo!("create a concrete policy from policy_str");
 
