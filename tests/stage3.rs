@@ -1,14 +1,12 @@
-use std::{collections::HashMap, str::FromStr};
+use std::collections::HashMap;
 
 use miniscript::{
-    bitcoin::{key::Secp256k1, Amount, PublicKey},
+    bitcoin::{key::Secp256k1, Amount},
     descriptor::Wsh,
-    policy::Concrete,
     Descriptor,
 };
 use workshop_miniscript_policy_puzzle__rs::{
-    generate_new_checked_address, generate_signature, mine_bitcoins, setup_bitcoind, spending_tx,
-    wallet_keypairs,
+    generate_new_checked_address, mine_bitcoins, setup_bitcoind, spending_tx, wallet_keypairs,
 };
 
 /// This test checks to see that a one of two keys can equally spend when encumbered by the
