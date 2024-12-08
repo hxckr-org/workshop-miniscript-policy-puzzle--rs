@@ -1,11 +1,10 @@
-#![allow(non_snake_case)]
 use std::{collections::HashMap, str::FromStr};
 
 use bitcoind::{
     anyhow::{self},
     bitcoincore_rpc::{
         self,
-        json::CreateRawTransactionInput,
+        json::{CreateRawTransactionInput, SigHashType},
         jsonrpc::{self, Response},
         Client, RpcApi,
     },
@@ -197,6 +196,7 @@ pub fn mine_bitcoins(
     bitcoind: &BitcoinD,
     ms_descr: &Descriptor<PublicKey>,
     block_count: u64,
+    cb_block_index: u64,
 ) -> Transaction {
     let address = ms_descr
         .address(miniscript::bitcoin::Network::Regtest)
@@ -208,7 +208,7 @@ pub fn mine_bitcoins(
     assert!(block_hashes.len() == block_count as usize);
     let block_hash = bitcoind
         .client
-        .get_block(&block_hashes[0])
+        .get_block(&block_hashes[cb_block_index as usize])
         .expect("Block hashes indexed out of bounds.");
     let coinbase_tx = block_hash
         .coinbase()
@@ -221,6 +221,7 @@ pub fn mine_bitcoins_to_address(
     bitcoind: &BitcoinD,
     address: &Address,
     block_count: u64,
+    cb_block_index: u64,
 ) -> Transaction {
     let block_hashes = bitcoind
         .client
@@ -230,7 +231,7 @@ pub fn mine_bitcoins_to_address(
 
     let block_hash = bitcoind
         .client
-        .get_block(&block_hashes[0])
+        .get_block(&block_hashes[cb_block_index as usize])
         .expect("Block hashes indexed out of bounds.");
 
     let coinbase_tx = block_hash
@@ -266,7 +267,7 @@ pub fn spending_tx(dest_addr: Address, amount: Amount, lock_tx: &Transaction) ->
             vout: 0,
         },
         script_sig: ScriptBuf::new(),
-        sequence: Sequence::ZERO,
+        sequence: Sequence::from_consensus(6),
         witness: Witness::new(),
     };
 
@@ -371,4 +372,44 @@ fn _spend_coinbase_utxo(bitcoind: &BitcoinD, coinbase_tx: &Transaction) {
                 "Transaction with ID {broadcast_txid} not in block {mined_block_hash}"
             ))
     ));
+}
+
+pub fn lock_tx(bitcoind: &BitcoinD, output_descr_address: String) -> Transaction {
+    let coinbase_addr = generate_new_checked_address(&bitcoind);
+    let coinbase_tx = mine_bitcoins_to_address(&bitcoind, &coinbase_addr, 101, 0);
+    let amount = Amount::from_sat(coinbase_tx.output[0].value.to_sat() - 10_000);
+
+    let lock_tx_str = create_psbt(
+        &bitcoind,
+        OutPoint {
+            txid: coinbase_tx.compute_txid(),
+            vout: 0,
+        },
+        None,
+        output_descr_address,
+        amount,
+    )
+    .expect("Failed to create lock PSBT");
+
+    let signed_psbt_tx = bitcoind
+        .client
+        .wallet_process_psbt(
+            &lock_tx_str,
+            Some(true),
+            Some(SigHashType::from(EcdsaSighashType::All)),
+            None,
+        )
+        .expect("Failed to process PSBT");
+
+    let finalized_lock_psbt = bitcoind
+        .client
+        .finalize_psbt(&signed_psbt_tx.psbt, Some(true))
+        .expect("Failed to finalize PSBT");
+
+    let finalized_lock_tx = finalized_lock_psbt
+        .transaction()
+        .unwrap()
+        .expect("Failed to extract transaction from finalized PSBT.");
+
+    finalized_lock_tx
 }

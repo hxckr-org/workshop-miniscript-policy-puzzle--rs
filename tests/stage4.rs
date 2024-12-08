@@ -37,7 +37,7 @@ fn one_of_two_one_unlikely() {
     let output_descr = Descriptor::Wsh(
         Wsh::new(miniscript.clone()).expect("Failed to create descriptor from miniscript"),
     );
-    let coinbase_tx = mine_bitcoins(&bitcoind_inst, &output_descr, 1);
+    let coinbase_tx = mine_bitcoins(&bitcoind_inst, &output_descr, 1, 0);
 
     // 5. Generate spending tx and valid signature.
     let dest_address = generate_new_checked_address(&bitcoind_inst);
@@ -96,7 +96,7 @@ fn one_of_two_one_more_likely() {
     let output_descr = Descriptor::Wsh(
         Wsh::new(miniscript.clone()).expect("Failed to create descriptor from miniscript"),
     );
-    let coinbase_tx = mine_bitcoins(&bitcoind_inst, &output_descr, 1);
+    let coinbase_tx = mine_bitcoins(&bitcoind_inst, &output_descr, 1, 0);
 
     // 5. Generate spending tx and valid signature.
     let dest_address = generate_new_checked_address(&bitcoind_inst);
