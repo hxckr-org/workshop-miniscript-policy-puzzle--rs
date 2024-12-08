@@ -42,7 +42,7 @@ fn one_of_two_one_unlikely() {
     // 5. Generate spending tx and valid signature.
     let dest_address = generate_new_checked_address(&bitcoind_inst);
     let amount = Amount::from_sat(coinbase_tx.output[0].value.to_sat() * 4 / 5);
-    let mut spend_tx = spending_tx(dest_address.clone(), amount, &coinbase_tx);
+    let mut spend_tx = spending_tx(dest_address.clone(), amount, &coinbase_tx, rel_timelock);
 
     let bitcoin_script = miniscript.encode();
     let ws = bitcoin_script.as_script();
@@ -101,7 +101,7 @@ fn one_of_two_one_more_likely() {
     // 5. Generate spending tx and valid signature.
     let dest_address = generate_new_checked_address(&bitcoind_inst);
     let amount = Amount::from_sat(coinbase_tx.output[0].value.to_sat() * 4 / 5);
-    let mut spend_tx = spending_tx(dest_address.clone(), amount, &coinbase_tx);
+    let mut spend_tx = spending_tx(dest_address.clone(), amount, &coinbase_tx, rel_timelock);
 
     let bitcoin_script = miniscript.encode();
     let ws = bitcoin_script.as_script();

@@ -50,7 +50,7 @@ fn user_without_service_or_timelock() {
     // 5. Generate spending tx and valid signature.
     let dest_address = generate_new_checked_address(&bitcoind_inst);
     let amount = Amount::from_sat(coinbase_tx.output[0].value.to_sat() * 4 / 5);
-    let mut spend_tx = spending_tx(dest_address.clone(), amount, &coinbase_tx);
+    let mut spend_tx = spending_tx(dest_address.clone(), amount, &coinbase_tx, rel_timelock);
 
     let bs = miniscript.encode();
     let ws = bs.as_script();
@@ -112,7 +112,7 @@ fn user_and_service() {
     // 5. Generate spending tx and valid signature.
     let dest_address = generate_new_checked_address(&bitcoind_inst);
     let amount = Amount::from_sat(coinbase_tx.output[0].value.to_sat() * 4 / 5);
-    let mut spend_tx = spending_tx(dest_address.clone(), amount, &coinbase_tx);
+    let mut spend_tx = spending_tx(dest_address.clone(), amount, &coinbase_tx, rel_timelock);
 
     let bs = miniscript.encode();
     let ws = bs.as_script();
@@ -202,12 +202,12 @@ fn user_and_timelock() {
     let dest_address = generate_new_checked_address(&bitcoind_inst);
     let amount = Amount::from_sat(lock_tx.output[0].value.to_sat() - 10_000);
 
-    let mut spend_tx = spending_tx(dest_address.clone(), amount, &lock_tx);
+    let mut spend_tx = spending_tx(dest_address.clone(), amount, &lock_tx, rel_timelock);
 
     let bs = miniscript.encode();
     let ws = bs.as_script();
 
-    // // Task 3: Valid signature(s) generation
+    // Task 3: Valid signature(s) generation
     let signature_user = todo!(
         "generate a signature matching the user's public key encoded in the spending condition"
     );
