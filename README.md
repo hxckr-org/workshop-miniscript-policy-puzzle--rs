@@ -4,6 +4,23 @@
 
 This puzzle is designed to test your understanding of Miniscript, and your ability to construct Miniscript policies that match given spending conditions. Miniscript is a powerful tool for expressing Bitcoin scripts in a more human-readable and manageable way.
 
+### Objective  
+Design and validate Bitcoin spending conditions using **Miniscript Policy** for specific spending scenarios.
+
+- **Expected Outcome**: Participants should produce a valid Miniscript that, when compiled, generates the correct Bitcoin script. This script must satisfy the provided spending conditions. Additionally, participants should generate valid witness to satisfy the spending conditions encoded in the generated script.
+
+#### Spending Paths 
+We present a handful of spending paths in these broad categories:
+
+0. **Single-sig**:
+    - Requiring exactly one signature from public key.
+
+1. **Multisig Path**:  
+   - Requires `n` signatures from `m` public key multisig setting immediately without delay.
+
+2. **Timelocked Signature Path**:  
+   - Requires `n` signature from `m` public key multisig setting with `p` blocks delay.
+
 ## Prerequisites
 
 - Basic knowledge of [Bitcoin scripting](https://learnmeabitcoin.com/technical/script/) and [Miniscript](https://bitcoin.sipa.be/miniscript/).
