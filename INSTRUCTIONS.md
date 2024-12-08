@@ -22,6 +22,7 @@ The spending conditions presented are as presented below. We provide test files 
 
 ## Resources
 
+- [Rus Miniscript Documentation](https://docs.rs/miniscript/latest/miniscript/)
 - [Miniscript Documentation](https://bitcoin.sipa.be/miniscript/)
 - [Rust miniscript code example](https://github.com/apoelstra/rust-miniscript/tree/master/examples)
 - [Streamlined Bitcoin Scripting With Miniscript](https://medium.com/blockstream/miniscript-bitcoin-scripting-3aeff3853620)

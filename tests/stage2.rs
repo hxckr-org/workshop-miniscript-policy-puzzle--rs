@@ -23,12 +23,17 @@ fn test_one_key_can_spend() {
 
     // 2. Task 1: Create miniscript policy for the single-key spending condition.
     let policy_str = todo!("write the policy that matches the spending condition.");
+    // HINT: The policy should be a single key spending condition.
+
     let policy = todo!("create a concrete policy from policy_str");
+    // HINT: Use the Concrete::from_str function to create a concrete policy from the policy string.
 
     // 3. Task 2: Compile policy to miniscript.
     let miniscript = todo!("compile the policy to miniscript with a Segwitv0 script context");
     // HINT: You can choose "any" script context you prefer, however, take note to modify how the
     // output descriptor is created to take into account your preferred script context.
+    // HINT: There is a compile function in the miniscript crate that you can use to compile
+    // the policy to miniscript.
 
     // 4. Mine bitcoins to descriptor address generated from miniscript.
     let output_descr = Descriptor::Wsh(
@@ -47,7 +52,7 @@ fn test_one_key_can_spend() {
     // Task 3: Valid signature generation
     let signature =
         todo!("generate a signature matching the public key encoded in the spending condition");
-    // HINT: Find generate_signature helper function.
+    // HINT: Find generate_signature helper function defined in the src/lib.rs file.
 
     let mut satisfier: HashMap<
         miniscript::bitcoin::PublicKey,

@@ -52,6 +52,12 @@ You can also run the program manually to test your changes.
 cargo test --test <file_name>
 ```
 
+For example:
+
+```bash
+cargo test --test stage2
+```
+
 ## Supporting Code
 
 We have provided you with a minimal bitcoind instance that you can use to test your code. The bitcoind instance is configured to use regtest mode, and it has been pre-configured for you. The [src/lib.rs](src/lib.rs) file contains the supporting code for this challenge. DO NOT MODIFY THIS FILE.
