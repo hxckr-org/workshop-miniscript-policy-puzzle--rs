@@ -136,6 +136,7 @@ pub fn extract_xprv_from_descriptor(descriptor: &str) -> Result<String, String> 
     }
 }
 
+/// Generate n key pairs from the loaded default wallet.
 pub fn wallet_keypairs(
     bitcoind: &BitcoinD,
     secp: &Secp256k1<All>,
@@ -192,6 +193,8 @@ pub fn wallet_keypairs(
     key_pairs
 }
 
+/// Mine bitcoins to the descriptor address returning the coinbase
+/// transaction in the block at cb_block_index.
 pub fn mine_bitcoins(
     bitcoind: &BitcoinD,
     ms_descr: &Descriptor<PublicKey>,
@@ -217,6 +220,8 @@ pub fn mine_bitcoins(
     coinbase_tx.clone()
 }
 
+/// Mine bitcoins to the provided address returning the coinbase
+/// transaction in the block at cb_block_index.
 pub fn mine_bitcoins_to_address(
     bitcoind: &BitcoinD,
     address: &Address,
@@ -255,7 +260,16 @@ pub fn generate_new_checked_address(bitcoind: &BitcoinD) -> Address {
     checked_addr
 }
 
-pub fn spending_tx(dest_addr: Address, amount: Amount, lock_tx: &Transaction) -> Transaction {
+/// Creates a spending transaction given the destination address,
+/// amount to send, the transaction containing the output being spent
+///  from, and the relative timelock that emcumbers the transaction
+/// output being spent.
+pub fn spending_tx(
+    dest_addr: Address,
+    amount: Amount,
+    lock_tx: &Transaction,
+    sequence: Sequence,
+) -> Transaction {
     let output = TxOut {
         value: amount,
         script_pubkey: dest_addr.script_pubkey(),
@@ -267,7 +281,7 @@ pub fn spending_tx(dest_addr: Address, amount: Amount, lock_tx: &Transaction) ->
             vout: 0,
         },
         script_sig: ScriptBuf::new(),
-        sequence: Sequence::from_consensus(6),
+        sequence,
         witness: Witness::new(),
     };
 
@@ -315,7 +329,8 @@ pub fn generate_signature(
     }
 }
 
-pub fn create_psbt(
+/// Helper function to create a PSBT
+fn create_psbt(
     bitcoind: &BitcoinD,
     prev_outpoint: OutPoint,
     sequence: Option<u32>,
