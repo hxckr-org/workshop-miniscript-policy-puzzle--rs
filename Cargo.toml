@@ -1,0 +1,16 @@
+[package]
+name = "workshop-miniscript-policy-puzzle--rs"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+base64 = { version = "0.22.1" }
+miniscript = { version = "12.3.0", features = [
+    "compiler",
+    "std",
+], default-features = true }
+bitcoind = { version = "0.36.1", features = ["25_1"] }
+thiserror = { version = "2.0.3" }
+serde = { version = "1.0.215", features = ["derive"] }
+serde_json = { version = "1.0.133" }
+hex = { version = "0.4.3" }
